@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import NotFound from './NotFound';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./pages/Login'));
@@ -37,37 +38,39 @@ export default function App() {
       */
   }
   return (
-    <div className="App">
-      <BrowserRouter>
-        <nav>
-          <Link to="/">홈</Link>
-          <Link to="/login">로그인</Link>
-          <Link to="/mypage">마이 페이지</Link>
-        </nav>
-        <Suspense fallback={<div>loading...</div>}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            {/* 동적 라우팅 */}
-            <Route path="/login" element={<Login />} />
+    <ThemeProvider>
+      <div className="App">
+        <BrowserRouter>
+          <nav>
+            <Link to="/">홈</Link>
+            <Link to="/login">로그인</Link>
+            <Link to="/mypage">마이 페이지</Link>
+          </nav>
+          <Suspense fallback={<div>loading...</div>}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              {/* 동적 라우팅 */}
+              <Route path="/login" element={<Login />} />
 
-            {/* 중첩 라우팅 : 상단 메뉴나 사이드바는 고정된 채, 특정 영역의 UI만 바뀌어야 하는 구조에서 사용합니다. */}
-            <Route
-              path="/mypage"
-              element={
-                <PrivateRoute>
-                  <MyPage />
-                </PrivateRoute>
-              }
-            >
-              <Route path="profile" element={<p>내 프로필 내용</p>} />
-              <Route path="settings" element={<p>환경설정 내용</p>} />
-            </Route>
+              {/* 중첩 라우팅 : 상단 메뉴나 사이드바는 고정된 채, 특정 영역의 UI만 바뀌어야 하는 구조에서 사용합니다. */}
+              <Route
+                path="/mypage"
+                element={
+                  <PrivateRoute>
+                    <MyPage />
+                  </PrivateRoute>
+                }
+              >
+                <Route path="profile" element={<p>내 프로필 내용</p>} />
+                <Route path="settings" element={<p>환경설정 내용</p>} />
+              </Route>
 
-            {/* 404 페이지 처리 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-    </div>
+              {/* 404 페이지 처리 */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </div>
+    </ThemeProvider>
   );
 }
