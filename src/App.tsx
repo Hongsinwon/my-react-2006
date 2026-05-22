@@ -2,6 +2,8 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import NotFound from './NotFound';
 import { ThemeProvider } from './contexts/ThemeContext';
+import ThemeToggle from './components/ThemeToggle';
+import LoginButton from './components/LoginButton';
 
 const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./pages/Login'));
@@ -46,6 +48,8 @@ export default function App() {
             <Link to="/login">로그인</Link>
             <Link to="/mypage">마이 페이지</Link>
           </nav>
+          <LoginButton />
+          <ThemeToggle />
           <Suspense fallback={<div>loading...</div>}>
             <Routes>
               <Route path="/" element={<Home />} />
