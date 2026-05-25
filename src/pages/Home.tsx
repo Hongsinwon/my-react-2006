@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { getSearch } from '../api/search';
+import TodoInput from '../components/TodoInput';
+import TodoList from '../components/TodoList';
 
 interface SearchData {
   bloggerlink: string;
@@ -27,5 +29,11 @@ export default function Home() {
     fetchSearchData();
   }, []);
 
-  return <h1>Home Page</h1>;
+  return (
+    <>
+      <h1>Home Page</h1>
+      <TodoInput />
+      <TodoList />
+    </>
+  );
 }
