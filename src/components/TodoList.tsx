@@ -1,24 +1,48 @@
+import { memo } from 'react';
+import type { Todo } from '../store/useTodoStore';
 import { useTodoStore } from '../store/useTodoStore';
 
+interface TodoItemProps {
+  todo: Todo;
+  onToggle: (id: number) => void;
+  onRemove: (id: number) => void;
+}
+
+const TodoItem = memo(function TodoItem({ todo, onToggle, onRemove }: TodoItemProps) {
+  return (
+    <li style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+      <span onClick={() => onToggle(todo.id)} style={{ cursor: 'pointer' }}>
+        {todo.text}
+      </span>
+      <button
+        type="button"
+        onClick={() => onRemove(todo.id)}
+        style={{ marginLeft: '10px' }}
+      >
+        삭제
+      </button>
+    </li>
+  );
+});
+
 const TodoList = () => {
-  // 상태와 액션을 한 번에 가져오기
-  const { todos, toggleTodo, removeTodo } = useTodoStore((state) => ({
-    todos: state.todos,
-    toggleTodo: state.toggleTodo,
-    removeTodo: state.removeTodo,
-  }));
+  const todos = useTodoStore((state) => state.todos);
+  const toggleTodo = useTodoStore((state) => state.toggleTodo);
+  const removeTodo = useTodoStore((state) => state.removeTodo);
+
+  if (todos.length === 0) {
+    return <p>할 일이 없습니다.</p>;
+  }
 
   return (
     <ul>
       {todos.map((todo) => (
-        <li key={todo.id} style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-          <span onClick={() => toggleTodo(todo.id)} style={{ cursor: 'pointer' }}>
-            {todo.text}
-          </span>
-          <button onClick={() => removeTodo(todo.id)} style={{ marginLeft: '10px' }}>
-            삭제
-          </button>
-        </li>
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onToggle={toggleTodo}
+          onRemove={removeTodo}
+        />
       ))}
     </ul>
   );

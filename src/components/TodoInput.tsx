@@ -8,8 +8,9 @@ const TodoInput = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!text.trim()) return;
-    addTodo(text);
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    addTodo(trimmed);
     setText('');
   };
 
